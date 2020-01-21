@@ -40,34 +40,34 @@ defmodule RobotSimulator do
     end)
   end
 
-  def step(instruction, robot) when instruction in ["L", "R"] do
+  defp step(instruction, robot) when instruction in ["L", "R"] do
     {:cont, turn(robot, instruction)}
   end
 
-  def step("A", robot) do
+  defp step("A", robot) do
     {:cont, advance(robot)}
   end
 
-  def step(_, _), do: {:halt, {:error, "invalid instruction"}}
+  defp step(_, _), do: {:halt, {:error, "invalid instruction"}}
 
-  def turn(%RobotSimulator{direction: direction, position: position}, hand),
-    do: %RobotSimulator{direction: turn(direction, hand), position: position}
+  def turn(%RobotSimulator{} = robot, hand),
+    do: %{robot | direction: do_turn(robot.direction, hand)}
 
-  def turn(:east, "R"), do: :south
-  def turn(:south, "R"), do: :west
-  def turn(:west, "R"), do: :north
-  def turn(:north, "L"), do: :west
-  def turn(:east, "L"), do: :north
-  def turn(:south, "L"), do: :east
-  def turn(:west, "L"), do: :south
+  defp do_turn(:east, "R"), do: :south
+  defp do_turn(:south, "R"), do: :west
+  defp do_turn(:west, "R"), do: :north
+  defp do_turn(:north, "L"), do: :west
+  defp do_turn(:east, "L"), do: :north
+  defp do_turn(:south, "L"), do: :east
+  defp do_turn(:west, "L"), do: :south
 
-  def advance(%RobotSimulator{direction: direction, position: position}),
-    do: %RobotSimulator{direction: direction, position: advance(direction, position)}
+  def advance(%RobotSimulator{} = robot),
+    do: %{robot | position: do_advance(robot.direction, robot.position)}
 
-  def advance(:north, {x, y}), do: {x, y + 1}
-  def advance(:south, {x, y}), do: {x, y - 1}
-  def advance(:east, {x, y}), do: {x + 1, y}
-  def advance(:west, {x, y}), do: {x - 1, y}
+  defp do_advance(:north, {x, y}), do: {x, y + 1}
+  defp do_advance(:south, {x, y}), do: {x, y - 1}
+  defp do_advance(:east, {x, y}), do: {x + 1, y}
+  defp do_advance(:west, {x, y}), do: {x - 1, y}
 
   @doc """
   Return the robot's direction.
