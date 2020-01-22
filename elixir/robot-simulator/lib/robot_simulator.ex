@@ -5,16 +5,18 @@ defmodule RobotSimulator do
   Valid directions are: `:north`, `:east`, `:south`, `:west`
   """
 
+  @directions [:north, :east, :south, :west]
+
   defstruct direction: :north, position: {0, 0}
 
-  @directions [:north, :east, :south, :west]
+  defguardp is_direction(direction) when direction in @directions
 
   @spec create(direction :: atom, position :: {integer, integer}) :: any
   def create do
     %RobotSimulator{}
   end
 
-  def create(direction, _) when direction not in @directions do
+  def create(direction, _) when not is_direction(direction) do
     {:error, "invalid direction"}
   end
 
