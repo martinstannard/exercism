@@ -1,11 +1,9 @@
-/*
-Solution for exercism Go track - two_fer
-*/
+// Package twofer provides a solution to the two_fer exercism exercise.
 package twofer
 
 import "fmt"
 
-// takes an optional name and returns an interpolated string
+// ShareWith takes an optional name and returns an interpolated string.
 func ShareWith(name string) string {
 	if name == "" {
 		name = "you"
