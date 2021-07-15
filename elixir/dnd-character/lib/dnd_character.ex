@@ -21,8 +21,7 @@ defmodule DndCharacter do
     0..3
     |> Enum.map(fn(_) -> :random.uniform(6) end)
     |> Enum.sort
-    |> Enum.reverse
-    |> Enum.take(3)
+    |> Enum.drop(1)
     |> Enum.sum
   end
 
