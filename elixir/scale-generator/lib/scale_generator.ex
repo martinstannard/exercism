@@ -13,10 +13,25 @@ defmodule ScaleGenerator do
   "M": E
   "A": F
   """
+
+  @chromatic_scale ~w(C C# D D# E F F# G G# A A# B)
+  @flat_chromatic_scale ~w(C Db D Eb E F Gb G Ab A Bb B)
+  @flat_tonics ~w(F Bb Eb Ab Db Gb d g c f bb eb)
+
   @spec step(scale :: list(String.t()), tonic :: String.t(), step :: String.t()) ::
           list(String.t())
   def step(scale, tonic, step) do
+    index =
+      scale
+      |> Enum.find_index(fn n -> n == tonic end)
+
+    found = rem(index + step_value(step), length(scale))
+    Enum.at(scale, found)
   end
+
+  defp step_value("m"), do: 1
+  defp step_value("M"), do: 2
+  defp step_value("A"), do: 3
 
   @doc """
   The chromatic scale is a musical scale with thirteen pitches, each a semitone
@@ -34,6 +49,9 @@ defmodule ScaleGenerator do
   """
   @spec chromatic_scale(tonic :: String.t()) :: list(String.t())
   def chromatic_scale(tonic \\ "C") do
+    tonic
+    |> String.upcase()
+    |> shuffler(@chromatic_scale)
   end
 
   @doc """
@@ -50,6 +68,9 @@ defmodule ScaleGenerator do
   """
   @spec flat_chromatic_scale(tonic :: String.t()) :: list(String.t())
   def flat_chromatic_scale(tonic \\ "C") do
+    tonic
+    |> String.capitalize()
+    |> shuffler(@flat_chromatic_scale)
   end
 
   @doc """
@@ -64,7 +85,13 @@ defmodule ScaleGenerator do
   """
   @spec find_chromatic_scale(tonic :: String.t()) :: list(String.t())
   def find_chromatic_scale(tonic) do
+    tonic
+    |> String.capitalize()
+    |> shuffler(find_scale(tonic))
   end
+
+  defp find_scale(tonic) when tonic in @flat_tonics, do: @flat_chromatic_scale
+  defp find_scale(_), do: @chromatic_scale
 
   @doc """
   The `pattern` string will let you know how many steps to make for the next
@@ -79,5 +106,28 @@ defmodule ScaleGenerator do
   """
   @spec scale(tonic :: String.t(), pattern :: String.t()) :: list(String.t())
   def scale(tonic, pattern) do
+    pattern
+    |> pattern_to_list()
+    |> scaler([], find_chromatic_scale(tonic))
   end
+
+  def pattern_to_list(pattern) do
+    pattern
+    |> String.split("")
+    |> Enum.reject(fn c -> c == "" end)
+   end
+
+  defp scaler([], [h | _] = list, _), do: list ++ [h]
+  defp scaler([ph | pt], result,[lh | _] = list) do
+    scaler(pt, result ++ [lh], step(ph, list))
+  end
+
+  defp step("m", list), do: list |> shuffle
+  defp step("M", list), do: list |> shuffle |> shuffle
+  defp step("A", list), do: list |> shuffle |> shuffle |> shuffle
+
+  defp shuffler(tonic, [tonic | _] = scale), do: scale ++ [tonic]
+  defp shuffler(tonic, [head | tail]), do: shuffler(tonic, tail ++ [head])
+
+  defp shuffle([head | tail]), do: tail ++ [head]
 end

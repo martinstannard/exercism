@@ -35,7 +35,4 @@ defmodule BinarySearch do
   def do_search([_ | t], key, index) do
     do_search(t, key, index + 1)
   end
-
-  def find_middle(list) do
-  end
 end
