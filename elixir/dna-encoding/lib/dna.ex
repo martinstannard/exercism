@@ -12,13 +12,12 @@ defmodule DNA do
   def decode_nucleotide(0b0000), do: ?\s
 
   def encode(dna) do
-    do_encode(<<0b0000>>, dna)
+    do_encode(<<>>, dna)
   end
 
   defp do_encode(result, []), do: result
   defp do_encode(result, [head | rest]) do
-    IO.inspect result
-    do_encode(result ++ <<encode_nucleotide(head)::4>>, rest)
+    do_encode(<<result::bitstring , encode_nucleotide(head)::4>>, rest)
   end
 
   def decode(dna) do
