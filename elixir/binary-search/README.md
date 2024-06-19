@@ -1,77 +1,71 @@
 # Binary Search
 
-Implement a binary search algorithm.
+Welcome to Binary Search on Exercism's Elixir Track.
+If you need help running the tests or submitting your code, check out `HELP.md`.
 
-Searching a sorted collection is a common task. A dictionary is a sorted
-list of word definitions. Given a word, one can find its definition. A
-telephone book is a sorted list of people's names, addresses, and
-telephone numbers. Knowing someone's name allows one to quickly find
-their telephone number and address.
+## Introduction
 
-If the list to be searched contains more than a few items (a dozen, say)
-a binary search will require far fewer comparisons than a linear search,
-but it imposes the requirement that the list be sorted.
+You have stumbled upon a group of mathematicians who are also singer-songwriters.
+They have written a song for each of their favorite numbers, and, as you can imagine, they have a lot of favorite numbers (like [0][zero] or [73][seventy-three] or [6174][kaprekars-constant]).
 
-In computer science, a binary search or half-interval search algorithm
-finds the position of a specified input value (the search "key") within
-an array sorted by key value.
+You are curious to hear the song for your favorite number, but with so many songs to wade through, finding the right song could take a while.
+Fortunately, they have organized their songs in a playlist sorted by the title — which is simply the number that the song is about.
 
-In each step, the algorithm compares the search key value with the key
-value of the middle element of the array.
+You realize that you can use a binary search algorithm to quickly find a song given the title.
 
-If the keys match, then a matching element has been found and its index,
-or position, is returned.
+[zero]: https://en.wikipedia.org/wiki/0
+[seventy-three]: https://en.wikipedia.org/wiki/73_(number)
+[kaprekars-constant]: https://en.wikipedia.org/wiki/6174_(number)
 
-Otherwise, if the search key is less than the middle element's key, then
-the algorithm repeats its action on the sub-array to the left of the
-middle element or, if the search key is greater, on the sub-array to the
-right.
+## Instructions
 
-If the remaining array to be searched is empty, then the key cannot be
-found in the array and a special "not found" indication is returned.
+Your task is to implement a binary search algorithm.
 
-A binary search halves the number of items to check with each iteration,
-so locating an item (or determining its absence) takes logarithmic time.
-A binary search is a dichotomic divide and conquer search algorithm.
+A binary search algorithm finds an item in a list by repeatedly splitting it in half, only keeping the half which contains the item we're looking for.
+It allows us to quickly narrow down the possible locations of our item until we find it, or until we've eliminated all possible locations.
 
-## Running tests
+~~~~exercism/caution
+Binary search only works when a list has been sorted.
+~~~~
 
-Execute the tests with:
+The algorithm looks like this:
 
-```bash
-$ mix test
-```
+- Find the middle element of a _sorted_ list and compare it with the item we're looking for.
+- If the middle element is our item, then we're done!
+- If the middle element is greater than our item, we can eliminate that element and all the elements **after** it.
+- If the middle element is less than our item, we can eliminate that element and all the elements **before** it.
+- If every element of the list has been eliminated then the item is not in the list.
+- Otherwise, repeat the process on the part of the list that has not been eliminated.
 
-### Pending tests
+Here's an example:
 
-In the test suites, all but the first test have been skipped.
+Let's say we're looking for the number 23 in the following sorted list: `[4, 8, 12, 16, 23, 28, 32]`.
 
-Once you get a test passing, you can unskip the next one by
-commenting out the relevant `@tag :pending` with a `#` symbol.
-
-For example:
-
-```elixir
-# @tag :pending
-test "shouting" do
-  assert Bob.hey("WATCH OUT!") == "Whoa, chill out!"
-end
-```
-
-Or, you can enable all the tests by commenting out the
-`ExUnit.configure` line in the test suite.
-
-```elixir
-# ExUnit.configure exclude: :pending, trace: true
-```
-
-If you're stuck on something, it may help to look at some of
-the [available resources](https://exercism.io/tracks/elixir/resources)
-out there where answers might be found.
+- We start by comparing 23 with the middle element, 16.
+- Since 23 is greater than 16, we can eliminate the left half of the list, leaving us with `[23, 28, 32]`.
+- We then compare 23 with the new middle element, 28.
+- Since 23 is less than 28, we can eliminate the right half of the list: `[23]`.
+- We've found our item.
 
 ## Source
 
-Wikipedia [http://en.wikipedia.org/wiki/Binary_search_algorithm](http://en.wikipedia.org/wiki/Binary_search_algorithm)
+### Created by
 
-## Submitting Incomplete Solutions
-It's possible to submit an incomplete solution so you can see how others have completed the exercise.
+- @bernardoamc
+
+### Contributed to by
+
+- @angelikatyborska
+- @Cohen-Carlisle
+- @devonestes
+- @lpil
+- @martinsvalin
+- @neenjaw
+- @parkerl
+- @screamingjungle
+- @sotojuan
+- @waiting-for-dev
+
+### Based on
+
+Wikipedia - https://en.wikipedia.org/wiki/Binary_search_algorithm

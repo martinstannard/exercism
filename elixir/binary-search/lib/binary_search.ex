@@ -28,7 +28,7 @@ defmodule BinarySearch do
     :not_found
   end
 
-  def do_search([key | rest], key, index) do
+  def do_search([key | _rest], key, index) do
     {:ok, index}
   end
 
