@@ -1,6 +1,7 @@
 defmodule Newsletter do
   def read_emails(path) do
-    File.open(path)
+    {:ok, content} = File.read(path)
+    do_read_emails(content)
   end
 
   def open_log(path) do
@@ -17,5 +18,12 @@ defmodule Newsletter do
 
   def send_newsletter(emails_path, log_path, send_fun) do
     # Please implement the send_newsletter/3 function
+  end
+
+  defp do_read_emails(""), do: []
+  defp do_read_emails(content) do
+    content
+    |> String.split("\n")
+    |> Enum.reject(&(&1 == ""))
   end
 end
