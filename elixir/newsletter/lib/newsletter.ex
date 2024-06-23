@@ -5,19 +5,36 @@ defmodule Newsletter do
   end
 
   def open_log(path) do
-    # Please implement the open_log/1 function
+    {:ok, pid} = File.open(path, [:read, :write])
+    pid
   end
 
   def log_sent_email(pid, email) do
-    # Please implement the log_sent_email/2 function
+    IO.write(pid, "#{email}\n")
   end
 
   def close_log(pid) do
-    # Please implement the close_log/1 function
+    File.close(pid)
   end
 
   def send_newsletter(emails_path, log_path, send_fun) do
-    # Please implement the send_newsletter/3 function
+    emails = read_emails(emails_path)
+    log_file = open_log(log_path)
+    emails
+    |> Enum.map(fn(address) ->
+      email_sent = send_fun.(address)
+      log_sent(email_sent, log_file, address)
+    end)
+    close_log(log_file)
+    :ok
+  end
+
+  defp log_sent(:ok, log_file,  address) do
+      log_sent_email(log_file, address)
+  end
+
+  defp log_sent(_, _, _) do
+    :ok
   end
 
   defp do_read_emails(""), do: []
