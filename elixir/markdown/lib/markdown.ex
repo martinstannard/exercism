@@ -12,16 +12,10 @@ defmodule Markdown do
   """
   @spec parse(String.t()) :: String.t()
   def parse(m) do
-    patch(
-      Enum.join(
-        Enum.map(
-          String.split(m, "\n"),
-          fn
-            t -> process(t)
-          end
-        )
-      )
-    )
+    String.split(m, "\n")
+    |> Enum.map(&process(&1))
+    |> Enum.join()
+    |> patch
   end
 
   defp process(t) do
@@ -39,13 +33,19 @@ defmodule Markdown do
 
   defp parse_header_md_level(hwt) do
     [h | t] = String.split(hwt)
-    {to_string(String.length(h)), Enum.join(t, " ")}
+
+    {
+      h |> String.length() |> to_string,
+      t |> Enum.join(" ")
+    }
   end
 
   defp parse_list_md_level(l) do
-    t = l
-    |> String.trim_leading("* ")
-    |> String.split
+    t =
+      l
+      |> String.trim_leading("* ")
+      |> String.split()
+
     "<li>" <> join_words_with_tags(t) <> "</li>"
   end
 
@@ -59,7 +59,7 @@ defmodule Markdown do
 
   defp join_words_with_tags(t) do
     t
-    |> Enum.map(fn w -> replace_md_with_tag(w) end)
+    |> Enum.map(&replace_md_with_tag(&1))
     |> Enum.join(" ")
   end
 
