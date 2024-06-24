@@ -14,20 +14,18 @@ defmodule ArmstrongNumber do
     sum == number
   end
 
-  @spec sum_digits([integer]) :: integer
+  @spec sum_digits([String.s()]) :: integer
   defp sum_digits(digits) do
-    power = length(digits)
     digits
-    |> Enum.reduce(0, fn digit, accum ->
-      accum + Integer.pow(digit, power)
-    end)
+    |> Enum.map(&String.to_integer/1)
+    |> Enum.map(&Integer.pow(&1, length(digits)))
+    |> Enum.sum
   end
 
-  @spec digits(integer) :: [integer]
+  @spec digits(integer) :: [String.s()]
   defp digits(number) do
     number
     |> Integer.to_string()
     |> String.split("", trim: true)
-    |> Enum.map(&String.to_integer/1)
   end
 end
