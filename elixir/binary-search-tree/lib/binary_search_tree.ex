@@ -16,12 +16,11 @@ defmodule BinarySearchTree do
   def insert(nil, data) do
     %{data: data, left: nil, right: nil}
   end
+  def insert(tree, data) when tree.data >= data do
+    %{data: tree.data, left: insert(tree.left, data), right: tree.right}
+  end
   def insert(tree, data) do
-    if tree.data >= data do
-      %{data: tree.data, left: insert(tree.left, data), right: tree.right}
-    else
-      %{data: tree.data, left: tree.left, right: insert(tree.right, data)}
-    end
+    %{data: tree.data, left: tree.left, right: insert(tree.right, data)}
   end
 
   @doc """
