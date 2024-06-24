@@ -12,4 +12,5 @@ defmodule StringSeries do
     |> String.split("", trim: true)
     |> Enum.chunk_every(size, 1, :discard)
     |> Enum.map(&Enum.join/1)
+  end
 end
