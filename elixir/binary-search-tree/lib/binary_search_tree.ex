@@ -29,17 +29,11 @@ defmodule BinarySearchTree do
   """
   @spec in_order(bst_node) :: [any]
   def in_order(tree) do
-    get_data(tree.left, tree, tree.right)
+    traverse(tree)
   end
 
-  defp get_data(nil, tree, nil), do: [tree.data]
-  defp get_data(left, tree, nil) do
-    get_data(left.left, left, left.right) ++ [tree.data]
-  end
-  defp get_data(nil, tree, right) do
-    [tree.data] ++ get_data(right.left, right, right.right)
-  end
-  defp get_data(left, tree, right) do
-    get_data(left.left, left, left.right) ++ [tree.data] ++ get_data(right.left, right, right.right)
+  def traverse(nil), do: []
+  def traverse(tree) do
+    traverse(tree.left) ++ [tree.data] ++ traverse(tree.right)
   end
 end
