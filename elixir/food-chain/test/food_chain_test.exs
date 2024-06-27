@@ -157,7 +157,7 @@ defmodule FoodChainTest do
     assert output == expected
   end
 
-  @tag :pending
+  # @tag :pending
   test "full song" do
     start = 1
     stop = 8

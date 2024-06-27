@@ -28,8 +28,15 @@ defmodule FoodChain do
 
   @spec recite(start :: integer, stop :: integer) :: String.t()
   def recite(start, stop) do
+    start..stop
+    |> Enum.map(fn (current) ->
+      animal_verse(current, current)
+    end)
+    |> Enum.join("\n")
+  end
+
+  def animal_verse(start, stop) do
     animals(start, stop)
-    |> IO.inspect
     |> Enum.map(fn(animal) -> verse(animal, stop) end)
     |> Enum.join("\n")
   end
@@ -40,7 +47,6 @@ defmodule FoodChain do
   end
 
   defp verse(animal, start) do
-    IO.puts "verse #{animal}, #{start}"
     swallowed(animal) <>
     @how[String.to_atom(animal)] <>
     reasons(start) <>
